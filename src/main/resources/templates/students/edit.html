@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Редактировать студента - Teacher Assistant')}"></head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">
+            <i class="bi bi-mortarboard-fill"></i> Teacher Assistant
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">
+                        <i class="bi bi-house"></i> Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/students">
+                        <i class="bi bi-people-fill"></i> Студенты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/homework">
+                        <i class="bi bi-journal-text"></i> Домашние задания
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topics">
+                        <i class="bi bi-book"></i> Темы
+                    </a>
+                </li>
+            </ul>
+            <div class="navbar-text me-3">
+                <i class="bi bi-person-circle me-1"></i>
+                <span th:text="${#authentication.name}"></span>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Выйти
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковое меню -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2"></i> Обзор
+                </a>
+                <a href="/students" class="list-group-item list-group-item-action">
+                    <i class="bi bi-people"></i> Все студенты
+                </a>
+                <a href="/students/create" class="list-group-item list-group-item-action">
+                    <i class="bi bi-person-plus"></i> Добавить студента
+                </a>
+                <a href="/homework/create" class="list-group-item list-group-item-action">
+                    <i class="bi bi-plus-circle"></i> Создать задание
+                </a>
+                <a href="/reports" class="list-group-item list-group-item-action">
+                    <i class="bi bi-graph-up"></i> Отчеты
+                </a>
+            </div>
+        </div>
+
+        <!-- Основная область -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Хлебные крошки -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/students">Студенты</a></li>
+                    <li class="breadcrumb-item active">Редактировать</li>
+                </ol>
+            </nav>
+
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-pencil-square text-primary me-2"></i>Редактировать студента
+                    </h1>
+                    <p class="text-muted mb-0">Измените информацию о студенте</p>
+                </div>
+                <div>
+                    <a th:href="@{/students/delete/{id}(id=${studentId})}"
+                       class="btn btn-outline-danger me-2"
+                       onclick="return confirm('Удалить этого студента?')">
+                        <i class="bi bi-trash me-1"></i> Удалить
+                    </a>
+                    <a href="/students" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Назад
+                    </a>
+                </div>
+            </div>
+
+            <!-- Сообщения -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Форма -->
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form th:action="@{/students/edit/{id}(id=${studentId})}"
+                          th:object="${studentDTO}"
+                          method="post"
+                          id="editForm">
+
+                        <div class="row">
+                            <!-- Левая колонка -->
+                            <div class="col-lg-6">
+                                <!-- ФИО -->
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">ФИО студента *</label>
+                                    <input type="text" th:field="*{fullName}"
+                                           id="fullName"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                                           required>
+                                    <div th:errors="*{fullName}" class="invalid-feedback"></div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input type="email" th:field="*{email}"
+                                           id="email"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                           required>
+                                    <div th:errors="*{email}" class="invalid-feedback"></div>
+                                </div>
+
+                                <!-- Telegram -->
+                                <div class="mb-3">
+                                    <label for="telegram" class="form-label">Telegram</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">@</span>
+                                        <input type="text" th:field="*{telegram}"
+                                               id="telegram"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Правая колонка -->
+                            <div class="col-lg-6">
+                                <!-- Возраст -->
+                                <div class="mb-3">
+                                    <label for="age" class="form-label">Возраст *</label>
+                                    <input type="number" th:field="*{age}"
+                                           id="age"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('age')} ? 'is-invalid' : ''"
+                                           min="1" max="120"
+                                           required>
+                                    <div th:errors="*{age}" class="invalid-feedback"></div>
+                                </div>
+
+                                <!-- Уровень -->
+                                <div class="mb-3">
+                                    <label for="level" class="form-label">Уровень</label>
+                                    <select th:field="*{level}"
+                                            id="level"
+                                            class="form-select">
+                                        <option value="">Выберите уровень</option>
+                                        <option value="beginner">Начинающий</option>
+                                        <option value="intermediate">Средний</option>
+                                        <option value="advanced">Продвинутый</option>
+                                    </select>
+                                </div>
+
+                                <!-- Заметки -->
+                                <div class="mb-3">
+                                    <label for="notes" class="form-label">Заметки</label>
+                                    <textarea th:field="*{notes}"
+                                              id="notes"
+                                              class="form-control"
+                                              rows="3"
+                                              maxlength="500"></textarea>
+                                    <div class="form-text">
+                                        Осталось символов: <span id="editCharCount">500</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Кнопки -->
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                            <div>
+                                <a href="/students" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-lg me-1"></i> Отмена
+                                </a>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i> Сохранить изменения
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript для формы -->
+<script>
+    // Подсчет символов в заметках
+    const editNotesTextarea = document.querySelector('textarea[name="notes"]');
+    const editCharCount = document.getElementById('editCharCount');
+
+    function updateEditCharCount() {
+        const maxLength = 500;
+        const currentLength = editNotesTextarea.value.length;
+        const remaining = maxLength - currentLength;
+
+        editCharCount.textContent = remaining;
+
+        editCharCount.className = '';
+        if (remaining <= 10) {
+            editCharCount.classList.add('text-danger');
+        } else if (remaining < 50) {
+            editCharCount.classList.add('text-warning');
+        } else {
+            editCharCount.classList.add('text-success');
+        }
+    }
+
+    if (editNotesTextarea && editCharCount) {
+        updateEditCharCount();
+        editNotesTextarea.addEventListener('input', updateEditCharCount);
+    }
+</script>
+</body>
+</html>

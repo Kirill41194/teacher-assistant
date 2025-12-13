@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Добавить студента - Teacher Assistant')}"></head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">
+            <i class="bi bi-mortarboard-fill"></i> Teacher Assistant
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">
+                        <i class="bi bi-house"></i> Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/students">
+                        <i class="bi bi-people-fill"></i> Студенты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/homework">
+                        <i class="bi bi-journal-text"></i> Домашние задания
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topics">
+                        <i class="bi bi-book"></i> Темы
+                    </a>
+                </li>
+            </ul>
+            <div class="navbar-text me-3">
+                <i class="bi bi-person-circle me-1"></i>
+                <span th:text="${#authentication.name}"></span>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Выйти
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковое меню -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2"></i> Обзор
+                </a>
+                <a href="/students" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-people"></i> Все студенты
+                </a>
+                <a href="/students/create" class="list-group-item list-group-item-action">
+                    <i class="bi bi-person-plus"></i> Добавить студента
+                </a>
+                <a href="/homework/create" class="list-group-item list-group-item-action">
+                    <i class="bi bi-plus-circle"></i> Создать задание
+                </a>
+                <a href="/reports" class="list-group-item list-group-item-action">
+                    <i class="bi bi-graph-up"></i> Отчеты
+                </a>
+            </div>
+        </div>
+
+        <!-- Основная область -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Хлебные крошки -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/students">Студенты</a></li>
+                    <li class="breadcrumb-item active">Добавить студента</li>
+                </ol>
+            </nav>
+
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-person-plus text-primary me-2"></i>Добавить студента
+                    </h1>
+                    <p class="text-muted mb-0">Заполните информацию о новом студенте</p>
+                </div>
+                <a href="/students" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Назад к списку
+                </a>
+            </div>
+
+            <!-- Сообщения об ошибках бизнес-логики (ЭТО ВНЕ ФОРМЫ!) -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Форма (НАЧАЛО ФОРМЫ С th:object) -->
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form th:action="@{/students/create}" th:object="${studentDTO}" method="post" id="studentForm">
+
+                        <!-- Сообщения об ошибках валидации (ЭТО ВНУТРИ ФОРМЫ!) -->
+                        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mb-4" role="alert">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Пожалуйста, исправьте ошибки в форме
+                        </div>
+
+                        <div class="row">
+                            <!-- Левая колонка -->
+                            <div class="col-lg-6">
+                                <!-- ФИО -->
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">
+                                        <i class="bi bi-person text-primary me-1"></i>ФИО студента *
+                                    </label>
+                                    <input type="text" th:field="*{fullName}"
+                                           id="fullName"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                                           placeholder="Иванов Иван Иванович"
+                                           required>
+                                    <!-- th:errors ВНУТРИ формы работает! -->
+                                    <div th:if="${#fields.hasErrors('fullName')}" class="invalid-feedback">
+                                        <span th:each="err : ${#fields.errors('fullName')}" th:text="${err}"></span>
+                                    </div>
+                                    <div class="form-text">Полное имя студента</div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="bi bi-envelope text-primary me-1"></i>Email *
+                                    </label>
+                                    <input type="email" th:field="*{email}"
+                                           id="email"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                           placeholder="student@example.com"
+                                           required>
+                                    <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                                        <span th:each="err : ${#fields.errors('email')}" th:text="${err}"></span>
+                                    </div>
+                                    <div class="form-text">Будет использоваться для уведомлений</div>
+                                </div>
+
+                                <!-- Telegram -->
+                                <div class="mb-3">
+                                    <label for="telegram" class="form-label">
+                                        <i class="bi bi-telegram text-primary me-1"></i>Telegram
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">@</span>
+                                        <input type="text" th:field="*{telegram}"
+                                               id="telegram"
+                                               class="form-control"
+                                               placeholder="username (без @)">
+                                    </div>
+                                    <div class="form-text">Имя пользователя в Telegram</div>
+                                </div>
+
+                                <!-- Возраст -->
+                                <div class="mb-3">
+                                    <label for="age" class="form-label">
+                                        <i class="bi bi-calendar3 text-primary me-1"></i>Возраст *
+                                    </label>
+                                    <input type="number" th:field="*{age}"
+                                           id="age"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('age')} ? 'is-invalid' : ''"
+                                           placeholder="18"
+                                           min="10" max="90"
+                                           required>
+                                    <div th:if="${#fields.hasErrors('age')}" class="invalid-feedback">
+                                        <span th:each="err : ${#fields.errors('age')}" th:text="${err}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Правая колонка -->
+                            <div class="col-lg-6">
+                                <!-- Уровень -->
+                                <div class="mb-3">
+                                    <label for="level" class="form-label">
+                                        <i class="bi bi-star text-primary me-1"></i>Уровень
+                                    </label>
+                                    <select th:field="*{level}"
+                                            id="level"
+                                            class="form-select">
+                                        <option value="">Выберите уровень</option>
+                                        <option value="beginner">Начинающий</option>
+                                        <option value="intermediate">Средний</option>
+                                        <option value="advanced">Продвинутый</option>
+                                    </select>
+                                    <div class="form-text">Текущий уровень знания предмета</div>
+                                </div>
+
+                                <!-- Заметки -->
+                                <div class="mb-4">
+                                    <label for="notes" class="form-label">
+                                        <i class="bi bi-card-text text-primary me-1"></i>Заметки
+                                    </label>
+                                    <textarea th:field="*{notes}"
+                                              id="notes"
+                                              class="form-control"
+                                              rows="4"
+                                              maxlength="500"
+                                              placeholder="Дополнительная информация о студенте..."></textarea>
+                                    <div class="form-text">
+                                        Максимум 500 символов. Осталось: <span id="charCount">500</span>
+                                    </div>
+                                </div>
+
+                                <!-- Информация о полях -->
+                                <div class="alert alert-info">
+                                    <h6 class="alert-heading">
+                                        <i class="bi bi-info-circle me-1"></i>Информация
+                                    </h6>
+                                    <ul class="mb-0 small">
+                                        <li>Поля отмеченные * обязательны для заполнения</li>
+                                        <li>Email должен быть уникальным для каждого студента</li>
+                                        <li>Данные можно изменить позже</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Кнопки -->
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                            <div>
+                                <a href="/students" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-lg me-1"></i> Отмена
+                                </a>
+                            </div>
+                            <div>
+                                <button type="reset" class="btn btn-outline-danger me-2">
+                                    <i class="bi bi-arrow-clockwise me-1"></i> Очистить
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i> Сохранить студента
+                                </button>
+                            </div>
+                        </div>
+                    </form> <!-- КОНЕЦ ФОРМЫ -->
+                </div>
+            </div>
+
+            <!-- Быстрые подсказки -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card border-primary border-opacity-25">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <i class="bi bi-lightbulb text-warning me-1"></i>Совет
+                            </h6>
+                            <p class="card-text small">Указывайте актуальный email для отправки домашних заданий</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-success border-opacity-25">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <i class="bi bi-chat-dots text-success me-1"></i>Telegram
+                            </h6>
+                            <p class="card-text small">Добавьте Telegram для быстрой связи со студентом</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-info border-opacity-25">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <i class="bi bi-journal-text text-info me-1"></i>Заметки
+                            </h6>
+                            <p class="card-text small">Добавляйте важную информацию: особенности обучения, цели и т.д.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript для формы -->
+<script>
+    // Подсчет символов в заметках
+    const notesTextarea = document.querySelector('textarea[name="notes"]');
+    const charCount = document.getElementById('charCount');
+
+    function updateCharCount() {
+        const maxLength = 500;
+        const currentLength = notesTextarea.value.length;
+        const remaining = maxLength - currentLength;
+
+        charCount.textContent = remaining;
+
+        // Изменяем цвет в зависимости от оставшегося количества символов
+        charCount.className = '';
+        if (remaining <= 10) {
+            charCount.classList.add('text-danger');
+        } else if (remaining < 50) {
+            charCount.classList.add('text-warning');
+        } else {
+            charCount.classList.add('text-success');
+        }
+    }
+
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        if (notesTextarea && charCount) {
+            updateCharCount();
+            notesTextarea.addEventListener('input', updateCharCount);
+        }
+    });
+</script>
+</body>
+</html>

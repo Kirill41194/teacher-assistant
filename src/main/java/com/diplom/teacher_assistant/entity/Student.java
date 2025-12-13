@@ -1,6 +1,7 @@
 package com.diplom.teacher_assistant.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Entity
@@ -18,7 +19,14 @@ public class Student {
     @Column(nullable = false)
     private String fullName;
 
+    @Column(nullable = false)
+    @Email
+    private String email;
+
     private String telegram;
+
+    @Column(nullable = false)
+    private Integer age;
 
     private String level;
 

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Студенты - Teacher Assistant')}"></head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">
+            <i class="bi bi-mortarboard-fill"></i> Teacher Assistant
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">
+                        <i class="bi bi-house"></i> Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/students">
+                        <i class="bi bi-people-fill"></i> Студенты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/homework">
+                        <i class="bi bi-journal-text"></i> Домашние задания
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topics">
+                        <i class="bi bi-book"></i> Темы
+                    </a>
+                </li>
+            </ul>
+            <div class="navbar-text me-3">
+                <i class="bi bi-person-circle me-1"></i>
+                <span th:text="${#authentication.name}"></span>
+            </div>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Выйти
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковое меню -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2"></i> Обзор
+                </a>
+                <a href="/students" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-people"></i> Все студенты
+                </a>
+                <a href="/students/create" class="list-group-item list-group-item-action">
+                    <i class="bi bi-person-plus"></i> Добавить студента
+                </a>
+                <a href="/homework/create" class="list-group-item list-group-item-action">
+                    <i class="bi bi-plus-circle"></i> Создать задание
+                </a>
+                <a href="/reports" class="list-group-item list-group-item-action">
+                    <i class="bi bi-graph-up"></i> Отчеты
+                </a>
+            </div>
+        </div>
+
+        <!-- Основная область -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-people text-primary me-2"></i>Студенты
+                    </h1>
+                    <p class="text-muted mb-0">Управление вашими студентами</p>
+                </div>
+                <a href="/students/create" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-1"></i> Добавить студента
+                </a>
+            </div>
+
+            <!-- Сообщения -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Таблица студентов -->
+            <div class="card shadow">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Email</th>
+                                <th>Возраст</th>
+                                <th>Уровень</th>
+                                <th>Telegram</th>
+                                <th>Заметки</th>
+                                <th class="text-end">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Список студентов -->
+                            <tr th:each="student : ${students}" class="align-middle">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-placeholder rounded-circle bg-primary bg-opacity-10
+                                                         text-primary d-flex align-items-center justify-content-center
+                                                         me-3" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                        <div>
+                                            <strong th:text="${student.fullName}"></strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td th:text="${student.email}"></td>
+                                <td>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary"
+                                              th:text="${student.age} + ' лет'">
+                                        </span>
+                                </td>
+                                <td>
+
+                                    <span th:if="${student.level == 'beginner'}"
+                                          class="badge bg-warning bg-opacity-10 text-warning">
+                                            Начинающий
+                                        </span>
+                                    <span th:if="${student.level == 'intermediate'}"
+                                          class="badge bg-info bg-opacity-10 text-info">
+                                            Средний
+                                        </span>
+                                    <span th:if="${student.level == 'advanced'}"
+                                          class="badge bg-success bg-opacity-10 text-success">
+                                            Продвинутый
+                                        </span>
+                                    <span th:if="${student.level == null or student.level == ''}"
+                                          class="badge bg-secondary bg-opacity-10 text-secondary">
+                                            Не указан
+                                        </span>
+                                </td>
+                                <td>
+                                    <a th:if="${student.telegram != null and student.telegram != ''}"
+                                       th:href="'https://t.me/' + ${student.telegram}"
+                                       target="_blank"
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-telegram"></i> @<span th:text="${student.telegram}"></span>
+                                    </a>
+                                    <span th:if="${student.telegram == null or student.telegram == ''}"
+                                          class="text-muted">—</span>
+                                </td>
+                                <td>
+                                    <div style="max-width: 200px;">
+                                        <small class="text-muted"
+                                               th:if="${student.notes != null and student.notes != ''}"
+                                               th:text="${#strings.length(student.notes) > 30 ?
+                                                           #strings.substring(student.notes, 0, 30) + '...' :
+                                                           student.notes}">
+                                        </small>
+                                        <small class="text-muted"
+                                               th:if="${student.notes == null or student.notes == ''}">—</small>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a th:href="@{/students/edit/{id}(id=${student.studentId})}"
+                                           class="btn btn-outline-primary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form th:action="@{/students/delete/{id}(id=${student.studentId})}"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Удалить студента?')">
+                                            <button type="submit" class="btn btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Если нет студентов -->
+                            <tr th:if="${#lists.isEmpty(students)}">
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="py-5">
+                                        <i class="bi bi-people display-1 text-muted opacity-25 mb-3"></i>
+                                        <h4 class="text-muted">Нет студентов</h4>
+                                        <p class="text-muted mb-4">Добавьте своего первого студента</p>
+                                        <a href="/students/create" class="btn btn-primary">
+                                            <i class="bi bi-person-plus me-1"></i> Добавить студента
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

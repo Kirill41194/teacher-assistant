@@ -23,7 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         Tutor tutor = tutorRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден: " + email));
 
-        // Получаем isActive через getter (Lombok должен сгенерировать getIsActive())
         if (tutor.getIsActive() == null || !tutor.getIsActive()) {
             throw new UsernameNotFoundException("Пользователь неактивен: " + email);
         }
