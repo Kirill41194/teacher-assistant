@@ -13,12 +13,12 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long topicId;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id", nullable = false)
-    private Subject subject;  // Связь вместо строки
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id", nullable = false)  // nullable = false здесь
+    private Subject subject;
 
     @Column(nullable = false)
-    private String name;     // Например: "Квадратные уравнения"
+    private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;

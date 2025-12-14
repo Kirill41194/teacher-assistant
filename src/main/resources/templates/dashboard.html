@@ -1,142 +1,312 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: head('Панель управления')"></head>
 <body>
-<!-- Навигация -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/dashboard">
-            <i class="bi bi-mortarboard-fill"></i> Teacher Assistant
-        </a>
+<div th:replace="~{fragments/nav :: mainNav}"></div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard">
-                        <i class="bi bi-house"></i> Главная
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/students">
-                        <i class="bi bi-people"></i> Студенты
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/homework">
-                        <i class="bi bi-journal-text"></i> Домашние задания
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/topics">
-                        <i class="bi bi-book"></i> Темы
-                    </a>
-                </li>
-            </ul>
-
-            <div class="navbar-text me-3">
-                <span sec:authentication="name"></span>
-            </div>
-
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right"></i> Выйти
-                </button>
-            </form>
-        </div>
-    </div>
-</nav>
-
-<!-- Основной контент -->
 <div class="container-fluid mt-4">
     <div class="row">
-        <!-- Боковое меню -->
-        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-            <div class="list-group list-group-flush">
-                <a href="/dashboard" class="list-group-item list-group-item-action active">
-                    <i class="bi bi-speedometer2"></i> Обзор
-                </a>
-                <a href="/students" class="list-group-item list-group-item-action">
-                    <i class="bi bi-person-plus"></i> Добавить студента
-                </a>
-                <a href="/homework/create" class="list-group-item list-group-item-action">
-                    <i class="bi bi-plus-circle"></i> Создать задание
-                </a>
-                <a href="/reports" class="list-group-item list-group-item-action">
-                    <i class="bi bi-graph-up"></i> Отчеты
-                </a>
-            </div>
-        </div>
+        <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
 
-        <!-- Основная область -->
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1 class="h2 mb-4">Добро пожаловать, <span th:text="${tutorName}"></span>!</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-house-door text-primary me-2"></i>Добро пожаловать,
+                        <span class="text-primary" th:text="${tutorName}"></span>!
+                    </h1>
+                    <p class="text-muted mb-0">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        <span th:text="${#dates.format(#dates.createNow(), 'EEEE, d MMMM yyyy')}"></span>
+                    </p>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline-secondary btn-sm" disabled>
+                        <i class="bi bi-calendar-week"></i> Эта неделя
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" disabled>
+                        <i class="bi bi-calendar-month"></i> Этот месяц
+                    </button>
+                </div>
+            </div>
 
-            <!-- Статистика -->
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-3 mb-4">
-                    <div class="card text-white bg-primary">
+                    <div class="card border-primary border-2">
                         <div class="card-body">
-                            <h5 class="card-title">Студенты</h5>
-                            <h2 class="card-text">15</h2>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle text-muted">Студенты</h6>
+                                    <h2 class="card-title" th:text="${studentCount ?: 0}">0</h2>
+                                </div>
+                                <i class="bi bi-people display-6 text-primary opacity-50"></i>
+                            </div>
+                            <div class="mt-3">
+                                <a href="/students" class="btn btn-outline-primary btn-sm w-100">
+                                    <i class="bi bi-arrow-right me-1"></i> Перейти
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-3 mb-4">
-                    <div class="card text-white bg-success">
+                    <div class="card border-success border-2">
                         <div class="card-body">
-                            <h5 class="card-title">Активные задания</h5>
-                            <h2 class="card-text">8</h2>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle text-muted">Предметы</h6>
+                                    <h2 class="card-title" th:text="${subjectCount ?: 0}">0</h2>
+                                </div>
+                                <i class="bi bi-book display-6 text-success opacity-50"></i>
+                            </div>
+                            <div class="mt-3">
+                                <a href="/subjects" class="btn btn-outline-success btn-sm w-100">
+                                    <i class="bi bi-arrow-right me-1"></i> Перейти
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-md-3 mb-4">
-                    <div class="card text-white bg-warning">
+                    <div class="card border-info border-2">
                         <div class="card-body">
-                            <h5 class="card-title">Скоро дедлайн</h5>
-                            <h2 class="card-text">3</h2>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-4">
-                    <div class="card text-white bg-info">
-                        <div class="card-body">
-                            <h5 class="card-title">Средний балл</h5>
-                            <h2 class="card-text">84%</h2>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle text-muted">Средний возраст</h6>
+                                    <h2 class="card-title" th:text="${averageAge ?: 0}">0</h2>
+                                </div>
+                                <i class="bi bi-calendar3 display-6 text-info opacity-50"></i>
+                            </div>
+                            <div class="mt-3">
+                                <small class="text-muted">лет</small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Быстрые действия -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Быстрые действия</h5>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-lightning-charge text-warning me-2"></i>Быстрые действия
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <a href="/students/create" class="btn btn-outline-primary w-100 py-3">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-person-plus fs-4 me-3"></i>
+                                            <div class="text-start">
+                                                <div class="fw-bold">Добавить студента</div>
+                                                <small class="text-muted">Новый ученик</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="/subjects/create" class="btn btn-outline-success w-100 py-3">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-book-plus fs-4 me-3"></i>
+                                            <div class="text-start">
+                                                <div class="fw-bold">Добавить предмет</div>
+                                                <small class="text-muted">Новый учебный курс</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a th:if="${subjectCount > 0}"
+                                       th:href="@{/subjects/{id}/topics/create(id=${firstSubjectId})}"
+                                       class="btn btn-outline-info w-100 py-3">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-bookmark-plus fs-4 me-3"></i>
+                                            <div class="text-start">
+                                                <div class="fw-bold">Добавить тему</div>
+                                                <small class="text-muted">К учебному предмету</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div th:if="${subjectCount == 0}" class="btn btn-outline-secondary w-100 py-3 disabled">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-bookmark-plus fs-4 me-3"></i>
+                                            <div class="text-start">
+                                                <div class="fw-bold">Добавить тему</div>
+                                                <small>Сначала создайте предмет</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="#" class="btn btn-outline-warning w-100 py-3 disabled">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-journal-plus fs-4 me-3"></i>
+                                            <div class="text-start">
+                                                <div class="fw-bold">Создать задание</div>
+                                                <small class="text-muted">Домашняя работа</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-clock-history text-primary me-2"></i>Последние студенты
+                            </h5>
+                            <a href="/students" class="btn btn-sm btn-outline-primary">
+                                Все студенты <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>ФИО</th>
+                                        <th>Возраст</th>
+                                        <th>Уровень</th>
+                                        <th>Дата добавления</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="student : ${recentStudents}"
+                                        th:if="${#lists.size(recentStudents) > 0}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-placeholder rounded-circle bg-primary bg-opacity-10
+                                                                 text-primary d-flex align-items-center justify-content-center
+                                                                 me-2" style="width: 32px; height: 32px;">
+                                                    <i class="bi bi-person"></i>
+                                                </div>
+                                                <span th:text="${student.fullName}"></span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${student.age} + ' лет'"></td>
+                                        <td>
+                                                <span th:if="${student.level == 'beginner'}"
+                                                      class="badge bg-warning bg-opacity-10 text-warning">
+                                                    Начинающий
+                                                </span>
+                                            <span th:if="${student.level == 'intermediate'}"
+                                                  class="badge bg-info bg-opacity-10 text-info">
+                                                    Средний
+                                                </span>
+                                            <span th:if="${student.level == 'advanced'}"
+                                                  class="badge bg-success bg-opacity-10 text-success">
+                                                    Продвинутый
+                                                </span>
+                                        </td>
+                                        <td class="text-muted">
+                                            <small>Сегодня</small>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(recentStudents)}">
+                                        <td colspan="4" class="text-center py-4">
+                                            <i class="bi bi-people display-6 text-muted opacity-25 mb-3 d-block"></i>
+                                            <p class="text-muted mb-0">Нет студентов</p>
+                                            <a href="/students/create" class="btn btn-sm btn-primary mt-2">
+                                                Добавить первого студента
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <a href="/homework/create" class="btn btn-outline-primary w-100">
-                                <i class="bi bi-plus-lg"></i> Новое задание
-                            </a>
+
+                <div class="col-lg-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-book text-success me-2"></i>Ваши предметы
+                            </h5>
                         </div>
-                        <div class="col-md-4">
-                            <a href="/students/create" class="btn btn-outline-success w-100">
-                                <i class="bi bi-person-add"></i> Добавить студента
-                            </a>
+                        <div class="card-body">
+                            <div th:if="${#lists.size(subjectsWithTopics) > 0}">
+                                <div class="list-group list-group-flush">
+                                    <div th:each="item : ${subjectsWithTopics}"
+                                         class="list-group-item border-0 px-0 py-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="mb-1" th:text="${item.subject.name}"></h6>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-bookmark me-1"></i>
+                                                    <span th:text="${item.topicCount}"></span>
+                                                    тем
+                                                </small>
+                                            </div>
+                                            <a th:href="@{/subjects/{id}/topics(id=${item.subject.subjectId})}"
+                                               class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <a href="/subjects" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-eye me-1"></i> Все предметы
+                                    </a>
+                                </div>
+                            </div>
+                            <div th:if="${#lists.isEmpty(subjectsWithTopics)}" class="text-center py-4">
+                                <i class="bi bi-book display-4 text-muted opacity-25 mb-3 d-block"></i>
+                                <p class="text-muted mb-2">Нет предметов</p>
+                                <a href="/subjects/create" class="btn btn-sm btn-success">
+                                    Добавить первый предмет
+                                </a>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <a href="/topics/create" class="btn btn-outline-info w-100">
-                                <i class="bi bi-bookmark-plus"></i> Новая тема
-                            </a>
+                    </div>
+
+                    <div class="card shadow">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-graph-up text-info me-2"></i>Статистика
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small>Начинающие студенты</small>
+                                    <small th:text="${beginnerCount ?: 0} + '/' + ${studentCount ?: 0}">0/0</small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-warning"
+                                         th:style="'width: ' + ${(beginnerCount ?: 0) / (studentCount > 0 ? studentCount : 1) * 100} + '%'">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small>Средний уровень</small>
+                                    <small th:text="${intermediateCount ?: 0} + '/' + ${studentCount ?: 0}">0/0</small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-info"
+                                         th:style="'width: ' + ${(intermediateCount ?: 0) / (studentCount > 0 ? studentCount : 1) * 100} + '%'">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small>Продвинутые студенты</small>
+                                    <small th:text="${advancedCount ?: 0} + '/' + ${studentCount ?: 0}">0/0</small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success"
+                                         th:style="'width: ' + ${(advancedCount ?: 0) / (studentCount > 0 ? studentCount : 1) * 100} + '%'">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,7 +314,5 @@
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

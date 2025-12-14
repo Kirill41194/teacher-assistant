@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<aside th:fragment="mainSidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+    <div class="list-group list-group-flush" id="sidebarMenu">
+        <a href="/dashboard" class="list-group-item list-group-item-action" data-path="/dashboard">
+            <i class="bi bi-speedometer2 me-2"></i> Обзор
+        </a>
+        <a href="/students" class="list-group-item list-group-item-action" data-path="/students">
+            <i class="bi bi-people me-2"></i> Студенты
+        </a>
+        <a href="/subjects" class="list-group-item list-group-item-action" data-path="/subjects">
+            <i class="bi bi-book me-2"></i> Предметы
+        </a>
+        <a href="/homework/create" class="list-group-item list-group-item-action" data-path="/homework">
+            <i class="bi bi-plus-circle me-2"></i> Создать задание
+        </a>
+        <a href="/reports" class="list-group-item list-group-item-action" data-path="/reports">
+            <i class="bi bi-graph-up me-2"></i> Отчеты
+        </a>
+    </div>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const menuItems = document.querySelectorAll('#sidebarMenu a[data-path]');
+
+            menuItems.forEach(item => {
+                const itemPath = item.getAttribute('data-path');
+
+                if (currentPath === itemPath ||
+                    (itemPath !== '/' && currentPath.startsWith(itemPath))) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</aside>
+</body>
+</html>

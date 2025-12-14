@@ -11,16 +11,9 @@ import java.util.Optional;
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
-    // Найти предмет по названию
-    Optional<Subject> findByName(String name);
 
-    // Поиск по части названия
-    List<Subject> findByNameContainingIgnoreCase(String name);
+    List<Subject> findByTutor_TutorIdOrderByName(Long tutorId);
 
-    // Получить все предметы с количеством студентов
-    @Query("SELECT s, COUNT(ss.student) as studentCount " +
-            "FROM Subject s LEFT JOIN StudentSubject ss ON s.subjectId = ss.subject.subjectId " +
-            "GROUP BY s.subjectId " +
-            "ORDER BY studentCount DESC")
-    List<Object[]> findAllWithStudentCount();
+    boolean existsByNameAndTutor_TutorId(String name, Long tutorId);
+
 }

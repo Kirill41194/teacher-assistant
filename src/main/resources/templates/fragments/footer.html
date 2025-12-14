@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Footer</title>
+</head>
+<body>
+
+<!-- Фрагмент футера -->
+<th:block th:fragment="mainFooter">
+    <footer class="footer mt-auto py-3 bg-light border-top">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <!-- Левая часть: информация -->
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <img th:src="@{/images/logo-sm.png}"
+                                 alt="Teacher Assistant"
+                                 height="30"
+                                 class="d-none d-sm-inline"
+                                 onerror="this.style.display='none'">
+                        </div>
+                        <div>
+                            <span class="text-muted small">
+                                <i class="bi bi-c-circle me-1"></i>
+                                2025 Teacher Assistant
+                            </span>
+                            <span class="text-muted small ms-3 d-none d-md-inline">
+                                <i class="bi bi-code-slash me-1"></i>
+                                Version 1.0.0
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правая часть: ссылки и кнопки -->
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex flex-wrap justify-content-center justify-content-md-end align-items-center">
+                        <!-- Ссылки -->
+                        <a href="#" class="text-muted small text-decoration-none me-3 d-none d-sm-inline"
+                           data-bs-toggle="modal" data-bs-target="#helpModal">
+                            <i class="bi bi-question-circle me-1"></i>Помощь
+                        </a>
+
+                        <a href="#" class="text-muted small text-decoration-none me-3 d-none d-sm-inline"
+                           data-bs-toggle="modal" data-bs-target="#aboutModal">
+                            <i class="bi bi-info-circle me-1"></i>О программе
+                        </a>
+
+                        <!-- Кнопка темной/светлой темы -->
+                        <button class="btn btn-sm btn-outline-secondary me-2"
+                                id="themeToggle"
+                                title="Сменить тему">
+                            <i class="bi bi-moon"></i>
+                        </button>
+
+                        <!-- Статус системы -->
+                        <span class="badge bg-success bg-opacity-10 text-success small">
+                            <i class="bi bi-check-circle me-1"></i>
+                            <span id="onlineStatus">Online</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно "Помощь" -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">
+                        <i class="bi bi-question-circle text-primary me-2"></i>
+                        Помощь по системе
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Как пользоваться системой:</h6>
+                    <ul class="mb-3">
+                        <li><strong>Студенты</strong> - добавление и управление учениками</li>
+                        <li><strong>Предметы</strong> - создание учебных курсов</li>
+                        <li><strong>Темы</strong> - добавление тем к предметам</li>
+                        <li><strong>Задания</strong> - планирование домашних работ</li>
+                    </ul>
+
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-lightbulb me-2"></i>
+                        <strong>Совет:</strong> Для быстрого доступа используйте боковое меню слева.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <a href="mailto:support@example.com" class="btn btn-primary">
+                        <i class="bi bi-envelope me-1"></i> Написать в поддержку
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно "О программе" -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">
+                        <i class="bi bi-info-circle text-primary me-2"></i>
+                        О системе Teacher Assistant
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-placeholder rounded-circle bg-primary bg-opacity-10
+                                    d-flex align-items-center justify-content-center mx-auto mb-3"
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-mortarboard-fill text-primary fs-2"></i>
+                        </div>
+                        <h4>Teacher Assistant</h4>
+                        <p class="text-muted mb-0">Версия 1.0.0</p>
+                    </div>
+
+                    <p class="mb-3">
+                        Система управления учебным процессом для репетиторов и преподавателей.
+                        Помогает организовать работу со студентами, предметами и темами.
+                    </p>
+
+                    <hr class="my-3">
+
+                    <div class="row text-center">
+                        <div class="col-6 mb-2">
+                            <div class="text-muted small">Разработчик</div>
+                            <div class="fw-semibold">Diplom Project</div>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <div class="text-muted small">Технологии</div>
+                            <div class="fw-semibold">Spring Boot, Thymeleaf, PostgreSQL</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                        <i class="bi bi-check-lg me-1"></i> Понятно
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<th:block th:fragment="footerScripts">
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+
+            // Проверяем сохраненную тему
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+                themeIcon.className = 'bi bi-sun';
+            }
+
+            themeToggle.addEventListener('click', function() {
+                const html = document.documentElement;
+                const isDark = html.getAttribute('data-bs-theme') === 'dark';
+
+                if (isDark) {
+                    html.removeAttribute('data-bs-theme');
+                    themeIcon.className = 'bi bi-moon';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    html.setAttribute('data-bs-theme', 'dark');
+                    themeIcon.className = 'bi bi-sun';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
+
+            const onlineStatus = document.getElementById('onlineStatus');
+            setInterval(() => {
+                const isOnline = Math.random() > 0.1;
+                if (isOnline) {
+                    onlineStatus.textContent = 'Online';
+                    onlineStatus.parentElement.className = 'badge bg-success bg-opacity-10 text-success small';
+                } else {
+                    onlineStatus.textContent = 'Offline';
+                    onlineStatus.parentElement.className = 'badge bg-danger bg-opacity-10 text-danger small';
+                }
+            }, 30000);
+        });
+    </script>
+</th:block>
+
+</body>
+</html>

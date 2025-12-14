@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Редактировать тему - Teacher Assistant')}"></head>
+<body>
+<!-- Навигация -->
+<div th:replace="~{fragments/nav :: mainNav}"></div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковое меню -->
+        <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
+
+        <!-- Основная область -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Хлебные крошки -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/subjects">Предметы</a></li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/subjects/{id}/topics(id=${subject.subjectId})}"
+                           th:text="${subject.name}"></a>
+                    </li>
+                    <li class="breadcrumb-item active">Редактировать тему</li>
+                </ol>
+            </nav>
+
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-pencil-square text-primary me-2"></i>Редактировать тему
+                    </h1>
+                    <p class="text-muted mb-0">Измените информацию о теме предмета
+                        <strong th:text="${subject.name}"></strong>
+                    </p>
+                </div>
+                <div>
+                    <a th:href="@{/topics/delete/{id}(id=${topicId})}"
+                       class="btn btn-outline-danger me-2"
+                       onclick="return confirm('Удалить эту тему?')">
+                        <i class="bi bi-trash me-1"></i> Удалить
+                    </a>
+                    <a th:href="@{/subjects/{id}/topics(id=${subject.subjectId})}"
+                       class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Назад
+                    </a>
+                </div>
+            </div>
+
+            <!-- Сообщения -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Форма -->
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form th:action="@{/topics/edit/{id}(id=${topicId})}"
+                          th:object="${topicDTO}"
+                          method="post">
+
+                        <!-- Название темы -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Название темы *</label>
+                            <input type="text" th:field="*{name}"
+                                   id="name"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                   required
+                                   maxlength="50">
+                            <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                                <span th:each="err : ${#fields.errors('name')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Описание темы -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Описание темы</label>
+                            <textarea th:field="*{description}"
+                                      id="description"
+                                      class="form-control"
+                                      rows="4"
+                                      maxlength="100"></textarea>
+                            <div class="form-text">
+                                Максимум 100 символов. Осталось: <span id="charCount">100</span>
+                            </div>
+                        </div>
+
+                        <!-- Скрытое поле с subjectId -->
+                        <input type="hidden" th:field="*{subjectId}">
+
+                        <!-- Кнопки -->
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                            <div>
+                                <a th:href="@{/subjects/{id}/topics(id=${subject.subjectId})}"
+                                   class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-lg me-1"></i> Отмена
+                                </a>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-1"></i> Сохранить изменения
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Подсчет символов в описании
+    const editDescriptionTextarea = document.querySelector('textarea[name="description"]');
+    const editCharCount = document.getElementById('charCount');
+
+    function updateEditCharCount() {
+        const maxLength = 100;
+        const currentLength = editDescriptionTextarea.value.length;
+        const remaining = maxLength - currentLength;
+
+        editCharCount.textContent = remaining;
+
+        // Изменяем цвет
+        editCharCount.className = '';
+        if (remaining <= 10) {
+            editCharCount.classList.add('text-danger');
+        } else if (remaining < 20) {
+            editCharCount.classList.add('text-warning');
+        } else {
+            editCharCount.classList.add('text-success');
+        }
+    }
+
+    if (editDescriptionTextarea && editCharCount) {
+        updateEditCharCount();
+        editDescriptionTextarea.addEventListener('input', updateEditCharCount);
+    }
+</script>
+</body>
+</html>

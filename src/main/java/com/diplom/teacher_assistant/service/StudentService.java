@@ -15,7 +15,6 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
-    private final TutorRepository tutorRepository;
     private final SecurityService securityService;
 
     public List<Student> getStudentByCurrentTutor(){
@@ -47,7 +46,7 @@ public class StudentService {
         Long tutorId = securityService.getCurrentTutorId();
 
         return studentRepository.findById(id)
-                .filter(student -> student.getTutor().getTutorId().equals(securityService.getCurrentTutorId()))
+                .filter(student -> student.getTutor().getTutorId().equals(tutorId))
                 .orElseThrow(() -> new IllegalArgumentException("Студент не найден"));
     }
 

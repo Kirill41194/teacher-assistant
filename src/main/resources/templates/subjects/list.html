@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Предметы - Teacher Assistant')}"></head>
+<body>
+
+<div th:replace="~{fragments/nav :: mainNav}"></div>
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковое меню -->
+        <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
+
+        <!-- Основная область -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Заголовок и кнопка -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-book text-primary me-2"></i>Предметы
+                    </h1>
+                    <p class="text-muted mb-0">Управление учебными предметами</p>
+                </div>
+                <a href="/subjects/create" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Добавить предмет
+                </a>
+            </div>
+
+            <!-- Сообщения -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Карточки статистики -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle text-muted">Всего предметов</h6>
+                                    <h3 class="card-title" th:text="${#lists.size(subjects)}">0</h3>
+                                </div>
+                                <i class="bi bi-book display-6 text-primary opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таблица предметов -->
+            <div class="card shadow">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Название предмета</th>
+                                <th>Количество тем</th>
+                                <th class="text-end">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Список предметов -->
+                            <tr th:each="subject : ${subjects}" class="align-middle">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-placeholder rounded-circle bg-primary bg-opacity-10
+                                                         text-primary d-flex align-items-center justify-content-center
+                                                         me-3" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-book"></i>
+                                        </div>
+                                        <div>
+                                            <strong th:text="${subject.name}"></strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                        <span class="badge bg-secondary">
+                                            <span th:text="${#lists.size(subject.topics)}">0</span> тем
+                                        </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <!-- Ссылка на темы предмета -->
+                                        <a th:href="@{/subjects/{id}/topics(id=${subject.subjectId})}"
+                                           class="btn btn-outline-info">
+                                            <i class="bi bi-list"></i> Темы
+                                        </a>
+                                        <a th:href="@{/subjects/edit/{id}(id=${subject.subjectId})}"
+                                           class="btn btn-outline-primary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form th:action="@{/subjects/delete/{id}(id=${subject.subjectId})}"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Удалить предмет?')">
+                                            <button type="submit" class="btn btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Если нет предметов -->
+                            <tr th:if="${#lists.isEmpty(subjects)}">
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="py-5">
+                                        <i class="bi bi-book display-1 text-muted opacity-25 mb-3"></i>
+                                        <h4 class="text-muted">Нет предметов</h4>
+                                        <p class="text-muted mb-4">Добавьте свой первый предмет</p>
+                                        <a href="/subjects/create" class="btn btn-primary">
+                                            <i class="bi bi-plus-lg me-1"></i> Добавить предмет
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

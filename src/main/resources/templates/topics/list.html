@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Темы - Teacher Assistant')}"></head>
+<body>
+<!-- Навигация -->
+<div th:replace="~{fragments/nav :: mainNav}"></div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковое меню -->
+        <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
+        <!-- Основная область -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Хлебные крошки -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/subjects">Предметы</a></li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/subjects/{id}/topics(id=${subject.subjectId})}"
+                           th:text="${subject.name}"></a>
+                    </li>
+                    <li class="breadcrumb-item active">Темы</li>
+                </ol>
+            </nav>
+
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-bookmark text-primary me-2"></i>Темы:
+                        <span class="text-primary" th:text="${subject.name}"></span>
+                    </h1>
+                    <p class="text-muted mb-0">Управление темами предмета</p>
+                </div>
+                <div>
+                    <a th:href="@{/subjects/{subjectId}/topics/create(subjectId=${subject.subjectId})}"
+                       class="btn btn-primary">
+                        <i class="bi bi-plus-lg me-1"></i> Добавить тему
+                    </a>
+                </div>
+            </div>
+
+            <!-- Сообщения -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Информация о предмете -->
+            <div class="card border-primary mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="card-title" th:text="${subject.name}"></h5>
+                            <p class="card-text text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Здесь вы можете добавлять и редактировать темы для этого предмета.
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a th:href="@{/subjects/edit/{id}(id=${subject.subjectId})}"
+                               class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-pencil me-1"></i> Редактировать предмет
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таблица тем -->
+            <div class="card shadow">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Название темы</th>
+                                <th>Описание</th>
+                                <th class="text-end">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Список тем -->
+                            <tr th:each="topic : ${topics}" class="align-middle">
+                                <td>
+                                    <strong th:text="${topic.name}"></strong>
+                                </td>
+                                <td>
+                                    <div style="max-width: 300px;">
+                                        <small class="text-muted"
+                                               th:if="${topic.description != null and topic.description != ''}"
+                                               th:text="${#strings.length(topic.description) > 50 ?
+                                                           #strings.substring(topic.description, 0, 50) + '...' :
+                                                           topic.description}">
+                                        </small>
+                                        <small class="text-muted"
+                                               th:if="${topic.description == null or topic.description == ''}">
+                                            Нет описания
+                                        </small>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a th:href="@{/topics/edit/{id}(id=${topic.topicId})}"
+                                           class="btn btn-outline-primary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form th:action="@{/topics/delete/{id}(id=${topic.topicId})}"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Удалить тему?')">
+                                            <button type="submit" class="btn btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Если нет тем -->
+                            <tr th:if="${#lists.isEmpty(topics)}">
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="py-5">
+                                        <i class="bi bi-bookmark display-1 text-muted opacity-25 mb-3"></i>
+                                        <h4 class="text-muted">Нет тем</h4>
+                                        <p class="text-muted mb-4">Добавьте первую тему к этому предмету</p>
+                                        <a th:href="@{/subjects/{subjectId}/topics/create(subjectId=${subject.subjectId})}"
+                                           class="btn btn-primary">
+                                            <i class="bi bi-plus-lg me-1"></i> Добавить тему
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

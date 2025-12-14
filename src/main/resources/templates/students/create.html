@@ -3,73 +3,12 @@
 <head th:replace="~{fragments/header :: head('Добавить студента - Teacher Assistant')}"></head>
 <body>
 <!-- Навигация -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/dashboard">
-            <i class="bi bi-mortarboard-fill"></i> Teacher Assistant
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">
-                        <i class="bi bi-house"></i> Главная
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/students">
-                        <i class="bi bi-people-fill"></i> Студенты
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/homework">
-                        <i class="bi bi-journal-text"></i> Домашние задания
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/topics">
-                        <i class="bi bi-book"></i> Темы
-                    </a>
-                </li>
-            </ul>
-            <div class="navbar-text me-3">
-                <i class="bi bi-person-circle me-1"></i>
-                <span th:text="${#authentication.name}"></span>
-            </div>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right"></i> Выйти
-                </button>
-            </form>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{fragments/nav :: mainNav}"></div>
 
 <div class="container-fluid mt-4">
     <div class="row">
         <!-- Боковое меню -->
-        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-            <div class="list-group list-group-flush">
-                <a href="/dashboard" class="list-group-item list-group-item-action">
-                    <i class="bi bi-speedometer2"></i> Обзор
-                </a>
-                <a href="/students" class="list-group-item list-group-item-action active">
-                    <i class="bi bi-people"></i> Все студенты
-                </a>
-                <a href="/students/create" class="list-group-item list-group-item-action">
-                    <i class="bi bi-person-plus"></i> Добавить студента
-                </a>
-                <a href="/homework/create" class="list-group-item list-group-item-action">
-                    <i class="bi bi-plus-circle"></i> Создать задание
-                </a>
-                <a href="/reports" class="list-group-item list-group-item-action">
-                    <i class="bi bi-graph-up"></i> Отчеты
-                </a>
-            </div>
-        </div>
+        <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
 
         <!-- Основная область -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
