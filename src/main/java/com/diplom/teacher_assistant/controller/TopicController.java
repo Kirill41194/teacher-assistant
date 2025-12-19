@@ -22,7 +22,6 @@ public class TopicController {
     private final TopicService topicService;
     private final SubjectService subjectService;
 
-    // URL: GET /subjects/{subjectId}/topics
     @GetMapping
     public String listTopics(
             @PathVariable Long subjectId,

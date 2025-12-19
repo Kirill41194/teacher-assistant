@@ -27,4 +27,7 @@ public class Subject {
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Topic> topics = new ArrayList<>();
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<StudentSubject> studentSubjects = new ArrayList<>();
 }

@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Заголовок не нужен здесь, так как это фрагмент -->
 </head>
 <body>
-<!-- Фрагмент навигации -->
 <nav th:fragment="mainNav" class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
+        <!-- Бренд и кнопка для мобильных -->
         <a class="navbar-brand" href="/dashboard">
             <i class="bi bi-mortarboard-fill me-1"></i> Teacher Assistant
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
+
+        <!-- Кнопка для мобильного меню -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- Меню -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
@@ -32,15 +39,21 @@
                     </a>
                 </li>
             </ul>
-            <div class="navbar-text me-3">
-                <i class="bi bi-person-circle me-1"></i>
-                <span th:text="${#authentication.name}"></span>
+
+            <!-- Правая часть -->
+            <div class="d-flex align-items-center">
+                <div class="navbar-text me-3 text-white">
+                    <i class="bi bi-person-circle me-1"></i>
+                    <a th:href="@{/tutor/profile}" class="text-white text-decoration-none">
+                        <span th:text="${#authentication.name}"></span>
+                    </a>
+                </div>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-box-arrow-right"></i> Выйти
+                    </button>
+                </form>
             </div>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right"></i> Выйти
-                </button>
-            </form>
         </div>
     </div>
 </nav>

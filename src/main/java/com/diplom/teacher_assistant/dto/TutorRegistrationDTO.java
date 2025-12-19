@@ -3,11 +3,15 @@ package com.diplom.teacher_assistant.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TutorRegistrationDTO {
 
     @NotBlank(message = "Имя и фамилия обязательны")
@@ -24,14 +28,4 @@ public class TutorRegistrationDTO {
 
     @NotBlank(message = "Подтверждение пароля обязательно")
     private String confirmPassword;
-
-    public TutorRegistrationDTO() {}
-
-    public TutorRegistrationDTO(String fullName, String email, String password, String confirmPassword) {
-        this.fullName = fullName;
-        this.email = email;
-        this.password = password;
-        this.confirmPassword = confirmPassword;
-    }
-
 }

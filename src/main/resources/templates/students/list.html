@@ -64,7 +64,7 @@
                                             <i class="bi bi-person"></i>
                                         </div>
                                         <div>
-                                            <strong th:text="${student.fullName}"></strong>
+                                            <a th:href="@{/students/{id}(id=${student.studentId})}"><strong th:text="${student.fullName}"></strong></a>
                                         </div>
                                     </div>
                                 </td>

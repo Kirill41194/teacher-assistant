@@ -1,44 +1,78 @@
-<!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head>
-</head>
-<body>
-<aside th:fragment="mainSidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-    <div class="list-group list-group-flush" id="sidebarMenu">
-        <a href="/dashboard" class="list-group-item list-group-item-action" data-path="/dashboard">
-            <i class="bi bi-speedometer2 me-2"></i> Обзор
-        </a>
-        <a href="/students" class="list-group-item list-group-item-action" data-path="/students">
-            <i class="bi bi-people me-2"></i> Студенты
-        </a>
-        <a href="/subjects" class="list-group-item list-group-item-action" data-path="/subjects">
-            <i class="bi bi-book me-2"></i> Предметы
-        </a>
-        <a href="/homework/create" class="list-group-item list-group-item-action" data-path="/homework">
-            <i class="bi bi-plus-circle me-2"></i> Создать задание
-        </a>
-        <a href="/reports" class="list-group-item list-group-item-action" data-path="/reports">
-            <i class="bi bi-graph-up me-2"></i> Отчеты
-        </a>
+<!-- ТОЛЬКО содержимое фрагмента, без оберток -->
+<aside th:fragment="mainSidebar" class="col-md-3 col-lg-2 bg-light sidebar">
+    <!-- Кнопка для мобильных -->
+    <div class="d-md-none p-3 bg-light border-bottom">
+        <button class="btn btn-outline-primary btn-sm w-100"
+                type="button"
+                onclick="toggleSidebar()">
+            <i class="bi bi-list"></i> Меню
+        </button>
     </div>
 
-    <script th:inline="javascript">
+    <!-- Сам сайдбар -->
+    <div class="d-none d-md-block" id="sidebarContent">
+        <div class="position-sticky pt-3">
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2 me-2"></i> Обзор
+                </a>
+                <a href="/students" class="list-group-item list-group-item-action">
+                    <i class="bi bi-people me-2"></i> Студенты
+                </a>
+                <a href="/subjects" class="list-group-item list-group-item-action">
+                    <i class="bi bi-book me-2"></i> Предметы
+                </a>
+                <a href="/homework/create" class="list-group-item list-group-item-action">
+                    <i class="bi bi-plus-circle me-2"></i> Создать задание
+                </a>
+                <a href="/reports" class="list-group-item list-group-item-action">
+                    <i class="bi bi-graph-up me-2"></i> Отчеты
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarContent');
+            if (sidebar.classList.contains('d-none')) {
+                sidebar.classList.remove('d-none');
+                sidebar.classList.add('d-block');
+            } else {
+                sidebar.classList.remove('d-block');
+                sidebar.classList.add('d-none');
+            }
+        }
+
+        // Автоматически скрываем на мобильных при загрузке
         document.addEventListener('DOMContentLoaded', function() {
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('sidebarContent');
+                if (sidebar) {
+                    sidebar.classList.add('d-none');
+                    sidebar.classList.remove('d-block');
+                }
+            }
+
+            // Подсветка активного пункта
             const currentPath = window.location.pathname;
-            const menuItems = document.querySelectorAll('#sidebarMenu a[data-path]');
-
-            menuItems.forEach(item => {
-                const itemPath = item.getAttribute('data-path');
-
-                if (currentPath === itemPath ||
-                    (itemPath !== '/' && currentPath.startsWith(itemPath))) {
+            document.querySelectorAll('.list-group-item').forEach(item => {
+                if (item.getAttribute('href') === currentPath) {
                     item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
                 }
             });
         });
+
+        // Автоматически показываем на десктопах
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebarContent');
+            if (window.innerWidth >= 768) {
+                sidebar.classList.remove('d-none');
+                sidebar.classList.add('d-block');
+            } else {
+                sidebar.classList.add('d-none');
+                sidebar.classList.remove('d-block');
+            }
+        });
     </script>
 </aside>
-</body>
-</html>

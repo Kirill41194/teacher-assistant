@@ -97,14 +97,10 @@
                                            class="btn btn-outline-primary">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <form th:action="@{/subjects/delete/{id}(id=${subject.subjectId})}"
-                                              method="post"
-                                              class="d-inline"
-                                              onsubmit="return confirm('Удалить предмет?')">
-                                            <button type="submit" class="btn btn-outline-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
+                                        <a th:href="@{/subjects/delete-confirm/{id}(id=${subject.subjectId})}"
+                                           class="btn btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

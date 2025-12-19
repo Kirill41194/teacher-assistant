@@ -78,7 +78,12 @@ public class SubjectService {
                 .collect(Collectors.toList());
     }
 
-    // DTO для передачи данных
+    public List<Subject> getSubjectsNotEnrolled(Long studentId) {
+        Long tutorId = securityService.getCurrentTutorId();
+        return subjectRepository.findSubjectsNotEnrolledByStudent(studentId, tutorId);
+    }
+
+
     @Data
     @AllArgsConstructor
     public static class SubjectWithTopicCount {

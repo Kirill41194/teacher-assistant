@@ -34,9 +34,4 @@ public class SecurityService {
         return getCurrentTutor().getFullName();
     }
 
-    public boolean isAuthenticated() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth != null && auth.isAuthenticated()
-                && !(auth instanceof AnonymousAuthenticationToken);
-    }
 }

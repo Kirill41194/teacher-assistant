@@ -1,6 +1,8 @@
 package com.diplom.teacher_assistant.repository;
 
+import com.diplom.teacher_assistant.entity.Student;
 import com.diplom.teacher_assistant.entity.StudentSubject;
+import com.diplom.teacher_assistant.entity.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,21 +14,78 @@ import java.util.Optional;
 @Repository
 public interface StudentSubjectRepository extends JpaRepository<StudentSubject, Long> {
 
-    // Найти по студенту и предмету
+    // 1. Основные методы поиска
     Optional<StudentSubject> findByStudent_StudentIdAndSubject_SubjectId(Long studentId, Long subjectId);
 
-    // Все предметы студента
     List<StudentSubject> findByStudent_StudentId(Long studentId);
 
-    // Все студенты по предмету
     List<StudentSubject> findBySubject_SubjectId(Long subjectId);
 
-    // Студенты с низким прогрессом по предмету
-    @Query("SELECT ss FROM StudentSubject ss WHERE ss.subject.subjectId = :subjectId AND ss.progressLevel < :minProgress")
-    List<StudentSubject> findStudentsWithLowProgress(@Param("subjectId") Long subjectId,
-                                                     @Param("minProgress") Integer minProgress);
+    boolean existsByStudentAndSubject(Student student, Subject subject);
 
-    // Средний прогресс по предмету
-    @Query("SELECT AVG(ss.progressLevel) FROM StudentSubject ss WHERE ss.subject.subjectId = :subjectId")
-    Double getAverageProgressBySubject(@Param("subjectId") Long subjectId);
+    boolean existsByStudent_StudentIdAndSubject_SubjectId(Long studentId, Long subjectId);
+
+    // 2. Методы с проверкой преподавателя (безопасность)
+    @Query("SELECT ss FROM StudentSubject ss " +
+            "WHERE ss.student.studentId = :studentId " +
+            "AND ss.student.tutor.tutorId = :tutorId")
+    List<StudentSubject> findByStudentIdAndTutorId(
+            @Param("studentId") Long studentId,
+            @Param("tutorId") Long tutorId
+    );
+
+    @Query("SELECT ss FROM StudentSubject ss " +
+            "WHERE ss.subject.subjectId = :subjectId " +
+            "AND ss.subject.tutor.tutorId = :tutorId")
+    List<StudentSubject> findBySubjectIdAndTutorId(
+            @Param("subjectId") Long subjectId,
+            @Param("tutorId") Long tutorId
+    );
+
+    @Query("SELECT ss FROM StudentSubject ss " +
+            "WHERE ss.student.studentId = :studentId " +
+            "AND ss.subject.subjectId = :subjectId " +
+            "AND ss.student.tutor.tutorId = :tutorId")
+    Optional<StudentSubject> findByStudentIdAndSubjectIdAndTutorId(
+            @Param("studentId") Long studentId,
+            @Param("subjectId") Long subjectId,
+            @Param("tutorId") Long tutorId
+    );
+
+    @Query("SELECT AVG(ss.progressLevel) FROM StudentSubject ss " +
+            "WHERE ss.student.studentId = :studentId " +
+            "AND ss.student.tutor.tutorId = :tutorId")
+    Double findAverageProgressByStudentIdAndTutorId(
+            @Param("studentId") Long studentId,
+            @Param("tutorId") Long tutorId
+    );
+
+    @Query("SELECT COUNT(ss) FROM StudentSubject ss " +
+            "WHERE ss.student.studentId = :studentId " +
+            "AND ss.student.tutor.tutorId = :tutorId")
+    Long countByStudentIdAndTutorId(
+            @Param("studentId") Long studentId,
+            @Param("tutorId") Long tutorId
+    );
+
+    @Query("DELETE FROM StudentSubject ss " +
+            "WHERE ss.student.studentId = :studentId " +
+            "AND ss.subject.subjectId = :subjectId " +
+            "AND ss.student.tutor.tutorId = :tutorId")
+    void deleteByStudentIdAndSubjectIdAndTutorId(
+            @Param("studentId") Long studentId,
+            @Param("subjectId") Long subjectId,
+            @Param("tutorId") Long tutorId
+    );
+
+    List<StudentSubject> findByStudent_StudentIdAndProgressLevelGreaterThanEqual(
+            Long studentId, Integer minProgress);
+
+    List<StudentSubject> findByStudent_StudentIdAndProgressLevelLessThanEqual(
+            Long studentId, Integer maxProgress);
+
+
+    void deleteByStudent_StudentId(Long studentId);
+
+    void deleteBySubject_SubjectId(Long subjectId);
 }

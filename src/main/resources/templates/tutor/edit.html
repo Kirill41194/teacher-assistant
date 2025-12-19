@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Редактирование профиля')}"></head>
+<body>
+
+<div th:replace="~{fragments/nav :: mainNav}"></div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковое меню -->
+        <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
+
+        <!-- Основная область -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-pencil-square text-primary me-2"></i>Редактирование профиля
+                    </h1>
+                    <p class="text-muted mb-0">Обновите личную информацию</p>
+                </div>
+                <a th:href="@{/tutor/profile}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Назад
+                </a>
+            </div>
+
+            <!-- Сообщения об ошибках -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Форма редактирования -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <form th:action="@{/tutor/edit}" method="post" th:object="${tutorDTO}">
+                        <!-- Основная информация -->
+                        <div class="row mb-4">
+                            <h5 class="mb-3">
+                                <i class="bi bi-person-lines-fill me-2"></i>Основная информация
+                            </h5>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ФИО *</label>
+                                <input type="text" class="form-control"
+                                       th:field="*{fullName}"
+                                       placeholder="Иванов Иван Иванович">
+                                <div class="text-danger" th:if="${#fields.hasErrors('fullName')}">
+                                    <small th:errors="*{fullName}"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-control"
+                                       th:field="*{email}"
+                                       placeholder="example@mail.ru">
+                                <div class="text-danger" th:if="${#fields.hasErrors('email')}">
+                                    <small th:errors="*{email}"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Телефон</label>
+                                <input type="tel" class="form-control"
+                                       th:field="*{phone}"
+                                       placeholder="+7 (999) 123-45-67">
+                                <div class="text-danger" th:if="${#fields.hasErrors('phone')}">
+                                    <small th:errors="*{phone}"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ссылка на аватар</label>
+                                <input type="url" class="form-control"
+                                       th:field="*{avatarUrl}"
+                                       placeholder="https://example.com/photo.jpg">
+                            </div>
+                        </div>
+
+                        <!-- Профессиональная информация -->
+                        <div class="row mb-4">
+                            <h5 class="mb-3">
+                                <i class="bi bi-briefcase me-2"></i>Профессиональная информация
+                            </h5>
+
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Образование</label>
+                                <input type="text" class="form-control"
+                                       th:field="*{education}"
+                                       placeholder="Высшее педагогическое образование">
+                                <div class="text-danger" th:if="${#fields.hasErrors('education')}">
+                                    <small th:errors="*{education}"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Опыт работы</label>
+                                <input type="text" class="form-control"
+                                       th:field="*{experience}"
+                                       placeholder="10 лет преподавания математики">
+                                <div class="text-danger" th:if="${#fields.hasErrors('experience')}">
+                                    <small th:errors="*{experience}"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <label class="form-label">О себе</label>
+                                <textarea class="form-control" rows="4"
+                                          th:field="*{description}"
+                                          placeholder="Расскажите о себе, методике преподавания..."></textarea>
+                                <div class="text-danger" th:if="${#fields.hasErrors('description')}">
+                                    <small th:errors="*{description}"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Кнопки -->
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/tutor/profile}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-1"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i> Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>

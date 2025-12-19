@@ -2,7 +2,9 @@ package com.diplom.teacher_assistant.service;
 
 import com.diplom.teacher_assistant.dto.StudentDTO;
 import com.diplom.teacher_assistant.entity.Student;
+import com.diplom.teacher_assistant.entity.StudentSubject;
 import com.diplom.teacher_assistant.repository.StudentRepository;
+import com.diplom.teacher_assistant.repository.StudentSubjectRepository;
 import com.diplom.teacher_assistant.repository.TutorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,15 +18,19 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final SecurityService securityService;
+    private final StudentSubjectRepository studentSubjectRepository;
 
     public List<Student> getStudentByCurrentTutor(){
         Long tutorId = securityService.getCurrentTutorId();
         return studentRepository.findByTutor_TutorIdOrderByFullName(tutorId);
     }
 
+    public List<StudentSubject> getStudentSubjects(Long studentId){
+        return studentSubjectRepository.findByStudent_StudentId(studentId);
+    }
+
     @Transactional
     public void createNewStudent(StudentDTO studentDTO){
-        Long tutorId = securityService.getCurrentTutorId();
 
         if (studentRepository.existsByEmailAndTutor_TutorId(studentDTO.getEmail(), securityService.getCurrentTutorId())){
             throw new IllegalArgumentException("Студент с таким email уже существует");

@@ -1,7 +1,10 @@
 package com.diplom.teacher_assistant.controller;
 
 import com.diplom.teacher_assistant.dto.SubjectDTO;
+import com.diplom.teacher_assistant.entity.Student;
+import com.diplom.teacher_assistant.entity.StudentSubject;
 import com.diplom.teacher_assistant.entity.Subject;
+import com.diplom.teacher_assistant.repository.StudentSubjectRepository;
 import com.diplom.teacher_assistant.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import java.util.List;
 public class SubjectController {
 
     private final SubjectService subjectService;
+    private final StudentSubjectRepository studentSubjectRepository;
 
     @GetMapping
     public String listSubjects(Model model) {
@@ -143,6 +147,19 @@ public class SubjectController {
         }
 
         return "redirect:/subjects";
+    }
+
+    @GetMapping("/delete-confirm/{id}")
+    public String showDeleteConfirm(@PathVariable Long id, Model model) {
+        Subject subject = subjectService.getSubjectByCurrenTutor(id);
+
+        model.addAttribute("subject", subject);
+        model.addAttribute("topics", subject.getTopics());
+
+        List<StudentSubject> students = studentSubjectRepository.findBySubject_SubjectId(id);
+        model.addAttribute("students", students);
+
+        return "subjects/delete-confirm";
     }
 
 }

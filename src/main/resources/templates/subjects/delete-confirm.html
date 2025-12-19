@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Подтверждение удаления')}"></head>
+<body>
+
+<div th:replace="~{fragments/nav :: mainNav}"></div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Подтверждение удаления предмета
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">
+                            Внимание! Будут удалены:
+                        </h5>
+                        <ul class="mb-0">
+                            <li>Сам предмет: <strong th:text="${subject.name}"></strong></li>
+                            <li>
+                                Все темы предмета:
+                                <strong th:text="${#lists.size(topics)}"></strong> шт.
+                            </li>
+                            <li>Все записи о студентах по этому предмету</li>
+                        </ul>
+                    </div>
+
+                    <!-- Список тем -->
+                    <div th:if="${not #lists.isEmpty(topics)}" class="mb-4">
+                        <h5>Будут удалены темы:</h5>
+                        <div class="list-group">
+                            <div th:each="topic : ${topics}"
+                                 class="list-group-item list-group-item-danger">
+                                <i class="bi bi-tag me-2"></i>
+                                <span th:text="${topic.name}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Список студентов (если добавишь получение студентов) -->
+                    <div th:if="${students != null and not #lists.isEmpty(students)}" class="mb-4">
+                        <h5>Затронутые студенты:</h5>
+                        <div class="list-group">
+                            <div th:each="student : ${students}"
+                                 class="list-group-item list-group-item-warning">
+                                <i class="bi bi-person me-2"></i>
+                                <span th:text="${student.student.fullName}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a th:href="@{/subjects}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i> Отмена
+                        </a>
+
+                        <form th:action="@{/subjects/delete/{id}(id=${subject.subjectId})}"
+                              method="post">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-1"></i>
+                                Удалить предмет и все связанные данные
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>
