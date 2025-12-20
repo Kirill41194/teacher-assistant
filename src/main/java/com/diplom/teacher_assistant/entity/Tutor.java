@@ -74,4 +74,18 @@ public class Tutor {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    // 1. Связь с предметами (Subject)
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Subject> subjects = new ArrayList<>();
+
+    // 2. Связь с AIRequestLog (логи запросов к ИИ)
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<AIRequestLog> aiRequestLogs = new ArrayList<>();
+
+    // 3. Связь с LessonGeneration (сгенерированные уроки)
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<LessonGeneration> lessonGenerations = new ArrayList<>();
 }

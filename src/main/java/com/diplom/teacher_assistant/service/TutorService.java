@@ -27,7 +27,6 @@ public class TutorService {
             throw new IllegalArgumentException("Пароли не совпадают");
         }
 
-        // Проверка уникальности email
         if (tutorRepository.existsByEmail(registrationDTO.getEmail())) {
             throw new IllegalArgumentException("Пользователь с таким email уже существует");
         }
@@ -63,6 +62,38 @@ public class TutorService {
         tutor.setEducation(dto.getEducation());
         tutor.setExperience(dto.getExperience());
         tutor.setAvatarUrl(dto.getAvatarUrl());
+
+        tutorRepository.save(tutor);
+    }
+
+    public void updateAnotherTutorInfo(Long tutorId, TutorProfileDTO tutorDTO) {
+        Tutor tutor = tutorRepository.findById(tutorId)
+                .orElseThrow(() -> new IllegalArgumentException("Преподаватель не найден"));
+
+        if (!tutor.getEmail().equals(tutorDTO.getEmail())) {
+            tutorRepository.findByEmail(tutorDTO.getEmail())
+                    .ifPresent(existingTutor -> {
+                        throw new IllegalArgumentException("Email уже используется другим преподавателем");
+                    });
+        }
+
+        if (!tutorDTO.getFullName().equals(tutor.getFullName())){
+            tutor.setFullName(tutorDTO.getFullName());
+        }
+
+        if (!tutor.getEmail().equals(tutorDTO.getEmail())) {
+            tutorRepository.findByEmail(tutorDTO.getEmail())
+                    .ifPresent(existingTutor -> {
+                        if (!existingTutor.getTutorId().equals(tutorId)) {
+                            throw new IllegalArgumentException("Email уже используется другим преподавателем");
+                        }
+                    });
+        }
+        tutor.setPhone(tutorDTO.getPhone());
+        tutor.setDescription(tutorDTO.getDescription());
+        tutor.setEducation(tutorDTO.getEducation());
+        tutor.setExperience(tutorDTO.getExperience());
+        tutor.setAvatarUrl(tutorDTO.getAvatarUrl());
 
         tutorRepository.save(tutor);
     }

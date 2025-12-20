@@ -46,7 +46,6 @@ public class RegistrationController {
         }
 
         try {
-            // Проверка совпадения паролей
             if (!tutorDTO.getPassword().equals(tutorDTO.getConfirmPassword())) {
                 redirectAttributes.addFlashAttribute("error", "Пароли не совпадают");
                 redirectAttributes.addFlashAttribute("tutor", tutorDTO);
