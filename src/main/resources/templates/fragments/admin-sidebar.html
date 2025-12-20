@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="adminSidebar" class="col-md-3 col-lg-2 bg-light sidebar">
+    <div class="position-sticky pt-3">
+        <div class="list-group list-group-flush">
+            <a href="/admin/dashboard" class="list-group-item list-group-item-action"
+               th:classappend="${requestURI != null and requestURI.startsWith('/admin/dashboard') ? 'active' : ''}">
+                <i class="bi bi-speedometer2 me-2"></i> Дашборд
+            </a>
+
+            <a href="/admin/tutors" class="list-group-item list-group-item-action"
+               th:classappend="${requestURI != null and #strings.contains(requestURI, '/admin/tutors') ? 'active' : ''}">
+                <i class="bi bi-people me-2"></i> Преподаватели
+                <span class="badge bg-primary rounded-pill float-end" th:text="${totalTutors != null ? totalTutors : ''}"></span>
+            </a>
+
+            <a href="/students" class="list-group-item list-group-item-action">
+                <i class="bi bi-person-badge me-2"></i> Все студенты
+            </a>
+            <a href="/admin/settings" class="list-group-item list-group-item-action">
+                <i class="bi bi-gear me-2"></i> Настройки
+            </a>
+
+            <div class="border-top my-3"></div>
+
+            <h6 class="sidebar-heading px-3 mt-3 mb-1 text-muted">Быстрые действия</h6>
+
+            <a href="/admin/tutors?filter=inactive" class="list-group-item list-group-item-action">
+                <i class="bi bi-person-x me-2"></i> Неактивные аккаунты
+            </a>
+
+            <a href="/admin/tutors?filter=admins" class="list-group-item list-group-item-action">
+                <i class="bi bi-shield-check me-2"></i> Администраторы
+            </a>
+
+            <a href="/admin/tutors?filter=new" class="list-group-item list-group-item-action">
+                <i class="bi bi-star me-2"></i> Новые регистрации
+            </a>
+
+            <div class="border-top my-3"></div>
+
+            <a href="/dashboard" class="list-group-item list-group-item-action text-primary">
+                <i class="bi bi-arrow-left-circle me-2"></i> Вернуться к преподаванию
+            </a>
+        </div>
+    </div>
+</aside>
+</body>
+</html>

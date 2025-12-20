@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -36,4 +39,7 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "tutor_id")
     private Tutor tutor;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentSubject> studentSubjects = new ArrayList<>();
 }

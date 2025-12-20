@@ -23,6 +23,8 @@
                     </div>
 
                     <form th:action="@{/register}" th:object="${tutor}" method="post">
+
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <!-- Имя и фамилия -->
                         <div class="mb-3">
                             <label class="form-label">Имя и фамилия *</label>

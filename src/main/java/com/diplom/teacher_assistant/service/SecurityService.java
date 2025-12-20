@@ -34,4 +34,9 @@ public class SecurityService {
         return getCurrentTutor().getFullName();
     }
 
+    public Tutor anotherTutorId(Long id){
+        return tutorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Преподаватель с ID "  + id +  " не найден"));
+    }
+
 }

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Добавить нового преподавателя')}"></head>
+<body>
+
+<div th:replace="~{fragments/admin-nav :: adminNav}"></div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Заголовок -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">
+                        <i class="bi bi-person-plus text-primary me-2"></i>Добавить нового преподавателя
+                    </h1>
+                    <p class="text-muted mb-0">Заполните форму для создания нового аккаунта преподавателя</p>
+                </div>
+                <div>
+                    <a href="/admin/tutors" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Назад к списку
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- Сообщения об успехе/ошибках -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Форма добавления -->
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-badge me-2"></i>Основная информация
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Убрал th:object, будем использовать простую форму -->
+                    <form th:action="@{/admin/tutors/new}" method="post" class="needs-validation" novalidate>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <div class="row g-3">
+                            <!-- Полное имя -->
+                            <div class="col-md-6">
+                                <label for="fullName" class="form-label">
+                                    <i class="bi bi-person me-1"></i>Полное имя <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control"
+                                       id="fullName"
+                                       name="fullName"
+                                       th:value="${tutorDTO != null ? tutorDTO.fullName : ''}"
+                                       placeholder="Иван Иванов" required>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, введите полное имя
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">
+                                    <i class="bi bi-envelope me-1"></i>Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control"
+                                       id="email"
+                                       name="email"
+                                       th:value="${tutorDTO != null ? tutorDTO.email : ''}"
+                                       placeholder="example@mail.ru" required>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, введите корректный email
+                                </div>
+                            </div>
+
+                            <!-- Телефон (необязательно) -->
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">
+                                    <i class="bi bi-telephone me-1"></i>Телефон
+                                </label>
+                                <input type="tel" class="form-control"
+                                       id="phone"
+                                       name="phone"
+                                       th:value="${tutorDTO != null ? tutorDTO.phone : ''}"
+                                       placeholder="+7 (999) 123-45-67">
+                            </div>
+
+                            <!-- Роль -->
+                            <div class="col-md-6">
+                                <label for="role" class="form-label">
+                                    <i class="bi bi-shield me-1"></i>Роль <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select"
+                                        id="role"
+                                        name="role"
+                                        required>
+                                    <option value="">Выберите роль...</option>
+                                    <option value="TUTOR"
+                                            th:selected="${tutorDTO != null and tutorDTO.role == 'TUTOR'}">
+                                        Преподаватель
+                                    </option>
+                                    <option value="ADMIN"
+                                            th:selected="${tutorDTO != null and tutorDTO.role == 'ADMIN'}">
+                                        Администратор
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, выберите роль
+                                </div>
+                            </div>
+
+                            <!-- Пароль -->
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-key me-1"></i>Пароль <span class="text-danger">*</span>
+                                </label>
+                                <input type="password" class="form-control"
+                                       id="password"
+                                       name="password"
+                                       placeholder="Минимум 6 символов" required>
+                                <small class="form-text text-muted">Пароль должен содержать минимум 6 символов</small>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, введите пароль (минимум 6 символов)
+                                </div>
+                            </div>
+
+                            <!-- Подтверждение пароля -->
+                            <div class="col-md-6">
+                                <label for="confirmPassword" class="form-label">
+                                    <i class="bi bi-key-fill me-1"></i>Подтверждение пароля <span class="text-danger">*</span>
+                                </label>
+                                <input type="password" class="form-control"
+                                       id="confirmPassword"
+                                       name="confirmPassword"
+                                       placeholder="Повторите пароль" required>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, подтвердите пароль
+                                </div>
+                            </div>
+
+                            <!-- Дополнительная информация -->
+                            <div class="col-12">
+                                <label for="description" class="form-label">
+                                    <i class="bi bi-chat-left-text me-1"></i>О себе
+                                </label>
+                                <textarea class="form-control"
+                                          id="description"
+                                          name="description"
+                                          rows="3"
+                                          th:text="${tutorDTO != null ? tutorDTO.description : ''}"
+                                          placeholder="Краткая информация о преподавателе (опыт, образование, специализация)"></textarea>
+                            </div>
+
+                            <!-- Образование -->
+                            <div class="col-md-6">
+                                <label for="education" class="form-label">
+                                    <i class="bi bi-mortarboard me-1"></i>Образование
+                                </label>
+                                <input type="text" class="form-control"
+                                       id="education"
+                                       name="education"
+                                       th:value="${tutorDTO != null ? tutorDTO.education : ''}"
+                                       placeholder="Высшее образование, университет...">
+                            </div>
+
+                            <!-- Опыт работы -->
+                            <div class="col-md-6">
+                                <label for="experience" class="form-label">
+                                    <i class="bi bi-briefcase me-1"></i>Опыт работы
+                                </label>
+                                <input type="text" class="form-control"
+                                       id="experience"
+                                       name="experience"
+                                       th:value="${tutorDTO != null ? tutorDTO.experience : ''}"
+                                       placeholder="Опыт преподавания...">
+                            </div>
+
+                            <!-- Статус аккаунта -->
+                            <div class="col-md-6">
+                                <div class="form-check mt-4">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="isActive"
+                                           name="isActive"
+                                           th:checked="${tutorDTO == null or tutorDTO.isActive == null or tutorDTO.isActive}">
+                                    <label class="form-check-label" for="isActive">
+                                        Активный аккаунт
+                                    </label>
+                                    <div class="form-text text-muted">Если не отмечено, преподаватель не сможет войти в систему</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Кнопки формы -->
+                        <div class="mt-4 pt-3 border-top">
+                            <div class="d-flex justify-content-between">
+                                <button type="reset" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-clockwise"></i> Очистить форму
+                                </button>
+                                <div>
+                                    <a href="/admin/tutors" class="btn btn-secondary me-2">
+                                        <i class="bi bi-x-circle"></i> Отмена
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-person-plus"></i> Создать преподавателя
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Подсказки -->
+            <div class="card mt-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Подсказки</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Поля отмеченные <span class="text-danger">*</span> обязательны для заполнения</li>
+                        <li>После создания аккаунта, преподаватель сможет войти в систему используя указанный email и пароль</li>
+                        <li>Администраторы имеют доступ к панели управления и могут управлять другими пользователями</li>
+                        <li>Если аккаунт не активен, пользователь не сможет войти в систему</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Валидация формы на стороне клиента
+    (function() {
+        'use strict'
+
+        const forms = document.querySelectorAll('.needs-validation')
+
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+</body>
+</html>

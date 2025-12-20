@@ -9,9 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -60,5 +64,14 @@ public class Tutor {
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Student> students = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "tutor_roles",
+            joinColumns = @JoinColumn(name = "tutor_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>(Set.of("TUTOR"));
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
 }

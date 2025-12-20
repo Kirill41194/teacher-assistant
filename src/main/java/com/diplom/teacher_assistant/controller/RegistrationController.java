@@ -53,7 +53,6 @@ public class RegistrationController {
                 return "redirect:/register";
             }
 
-            // Регистрация пользователя
             tutorService.registerTutor(tutorDTO);
 
             redirectAttributes.addFlashAttribute("success",

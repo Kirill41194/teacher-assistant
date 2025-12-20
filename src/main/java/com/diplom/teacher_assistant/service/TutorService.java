@@ -1,5 +1,6 @@
 package com.diplom.teacher_assistant.service;
 
+import com.diplom.teacher_assistant.dto.TutorCreateByAdminDTO;
 import com.diplom.teacher_assistant.dto.TutorProfileDTO;
 import com.diplom.teacher_assistant.dto.TutorRegistrationDTO;
 import com.diplom.teacher_assistant.entity.Tutor;
@@ -8,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +67,31 @@ public class TutorService {
         tutorRepository.save(tutor);
     }
 
+    public Tutor registerTutorAsAdmin(TutorCreateByAdminDTO tutorDTO) {
+        if (tutorRepository.findByEmail(tutorDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Пользователь с таким email уже существует");
+        }
+
+        Tutor tutor = new Tutor();
+        tutor.setFullName(tutorDTO.getFullName());
+        tutor.setEmail(tutorDTO.getEmail());
+        tutor.setPhone(tutorDTO.getPhone());
+        tutor.setDescription(tutorDTO.getDescription());
+        tutor.setEducation(tutorDTO.getEducation());
+        tutor.setExperience(tutorDTO.getExperience());
+        tutor.setPasswordHash(passwordEncoder.encode(tutorDTO.getPassword()));
+        tutor.setIsActive(tutorDTO.getIsActive() != null ? tutorDTO.getIsActive() : true);
+
+        Set<String> roles = new HashSet<>();
+        if ("ADMIN".equals(tutorDTO.getRole())) {
+            roles.add("ADMIN");
+            roles.add("TUTOR");
+        } else {
+            roles.add("TUTOR");
+        }
+        tutor.setRoles(roles);
+
+        return tutorRepository.save(tutor);
+    }
 
 }
