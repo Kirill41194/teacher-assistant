@@ -2,16 +2,16 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head('Темы - Teacher Assistant')}"></head>
 <body>
-<!-- Навигация -->
+
 <div th:replace="~{fragments/nav :: mainNav}"></div>
 
 <div class="container-fluid mt-4">
     <div class="row">
-        <!-- Боковое меню -->
+
         <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
-        <!-- Основная область -->
+
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Хлебные крошки -->
+
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
@@ -24,7 +24,7 @@
                 </ol>
             </nav>
 
-            <!-- Заголовок -->
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h2 mb-1">
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <!-- Сообщения -->
+
             <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
                 <i class="bi bi-check-circle me-2"></i>
                 <span th:text="${success}"></span>
@@ -54,7 +54,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Информация о предмете -->
+
             <div class="card border-primary mb-4">
                 <div class="card-body">
                     <div class="row">
@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <!-- Таблица тем -->
+
             <div class="card shadow">
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -88,7 +88,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!-- Список тем -->
+
                             <tr th:each="topic : ${topics}" class="align-middle">
                                 <td>
                                     <strong th:text="${topic.name}"></strong>
@@ -125,7 +125,7 @@
                                 </td>
                             </tr>
 
-                            <!-- Если нет тем -->
+
                             <tr th:if="${#lists.isEmpty(topics)}">
                                 <td colspan="3" class="text-center py-5">
                                     <div class="py-5">

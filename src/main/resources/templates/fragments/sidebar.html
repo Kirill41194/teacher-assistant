@@ -1,6 +1,6 @@
-<!-- ТОЛЬКО содержимое фрагмента, без оберток -->
+
 <aside th:fragment="mainSidebar" class="col-md-3 col-lg-2 bg-light sidebar">
-    <!-- Кнопка для мобильных -->
+
     <div class="d-md-none p-3 bg-light border-bottom">
         <button class="btn btn-outline-primary btn-sm w-100"
                 type="button"
@@ -9,7 +9,7 @@
         </button>
     </div>
 
-    <!-- Сам сайдбар -->
+
     <div class="d-none d-md-block" id="sidebarContent">
         <div class="position-sticky pt-3">
             <div class="list-group list-group-flush">
@@ -44,7 +44,7 @@
             }
         }
 
-        // Автоматически скрываем на мобильных при загрузке
+
         document.addEventListener('DOMContentLoaded', function() {
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('sidebarContent');
@@ -54,7 +54,7 @@
                 }
             }
 
-            // Подсветка активного пункта
+
             const currentPath = window.location.pathname;
             document.querySelectorAll('.list-group-item').forEach(item => {
                 if (item.getAttribute('href') === currentPath) {
@@ -63,7 +63,7 @@
             });
         });
 
-        // Автоматически показываем на десктопах
+
         window.addEventListener('resize', function() {
             const sidebar = document.getElementById('sidebarContent');
             if (window.innerWidth >= 768) {

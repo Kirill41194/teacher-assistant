@@ -13,7 +13,11 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 
     boolean existsByNameAndSubject_SubjectId(String name, Long subjectId);
 
+    boolean existsBySubject_SubjectId(Long subjectId);
+
     long countBySubject_SubjectId(Long subjectId);
 
     Optional<Topic> findByTopicIdAndSubject_Tutor_TutorId(Long topicId, Long tutorId);
+
+    boolean existsByTopicIdAndSubject_Tutor_TutorId(Long topicId, Long tutorId);
 }

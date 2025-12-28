@@ -81,14 +81,7 @@ public class TutorService {
             tutor.setFullName(tutorDTO.getFullName());
         }
 
-        if (!tutor.getEmail().equals(tutorDTO.getEmail())) {
-            tutorRepository.findByEmail(tutorDTO.getEmail())
-                    .ifPresent(existingTutor -> {
-                        if (!existingTutor.getTutorId().equals(tutorId)) {
-                            throw new IllegalArgumentException("Email уже используется другим преподавателем");
-                        }
-                    });
-        }
+        tutor.setEmail(tutorDTO.getEmail());
         tutor.setPhone(tutorDTO.getPhone());
         tutor.setDescription(tutorDTO.getDescription());
         tutor.setEducation(tutorDTO.getEducation());

@@ -2,17 +2,17 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head('Добавить студента - Teacher Assistant')}"></head>
 <body>
-<!-- Навигация -->
+
 <div th:replace="~{fragments/nav :: mainNav}"></div>
 
 <div class="container-fluid mt-4">
     <div class="row">
-        <!-- Боковое меню -->
+
         <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
 
-        <!-- Основная область -->
+
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Хлебные крошки -->
+
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
@@ -21,7 +21,7 @@
                 </ol>
             </nav>
 
-            <!-- Заголовок -->
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h2 mb-1">
@@ -34,28 +34,28 @@
                 </a>
             </div>
 
-            <!-- Сообщения об ошибках бизнес-логики (ЭТО ВНЕ ФОРМЫ!) -->
+
             <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
                 <i class="bi bi-exclamation-triangle me-2"></i>
                 <span th:text="${error}"></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Форма (НАЧАЛО ФОРМЫ С th:object) -->
+
             <div class="card shadow">
                 <div class="card-body p-4">
                     <form th:action="@{/students/create}" th:object="${studentDTO}" method="post" id="studentForm">
 
-                        <!-- Сообщения об ошибках валидации (ЭТО ВНУТРИ ФОРМЫ!) -->
+
                         <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mb-4" role="alert">
                             <i class="bi bi-exclamation-triangle me-2"></i>
                             Пожалуйста, исправьте ошибки в форме
                         </div>
 
                         <div class="row">
-                            <!-- Левая колонка -->
+
                             <div class="col-lg-6">
-                                <!-- ФИО -->
+
                                 <div class="mb-3">
                                     <label for="fullName" class="form-label">
                                         <i class="bi bi-person text-primary me-1"></i>ФИО студента *
@@ -66,14 +66,14 @@
                                            th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
                                            placeholder="Иванов Иван Иванович"
                                            required>
-                                    <!-- th:errors ВНУТРИ формы работает! -->
+
                                     <div th:if="${#fields.hasErrors('fullName')}" class="invalid-feedback">
                                         <span th:each="err : ${#fields.errors('fullName')}" th:text="${err}"></span>
                                     </div>
                                     <div class="form-text">Полное имя студента</div>
                                 </div>
 
-                                <!-- Email -->
+
                                 <div class="mb-3">
                                     <label for="email" class="form-label">
                                         <i class="bi bi-envelope text-primary me-1"></i>Email *
@@ -90,7 +90,7 @@
                                     <div class="form-text">Будет использоваться для уведомлений</div>
                                 </div>
 
-                                <!-- Telegram -->
+
                                 <div class="mb-3">
                                     <label for="telegram" class="form-label">
                                         <i class="bi bi-telegram text-primary me-1"></i>Telegram
@@ -105,7 +105,7 @@
                                     <div class="form-text">Имя пользователя в Telegram</div>
                                 </div>
 
-                                <!-- Возраст -->
+
                                 <div class="mb-3">
                                     <label for="age" class="form-label">
                                         <i class="bi bi-calendar3 text-primary me-1"></i>Возраст *
@@ -123,9 +123,9 @@
                                 </div>
                             </div>
 
-                            <!-- Правая колонка -->
+
                             <div class="col-lg-6">
-                                <!-- Уровень -->
+
                                 <div class="mb-3">
                                     <label for="level" class="form-label">
                                         <i class="bi bi-star text-primary me-1"></i>Уровень
@@ -141,7 +141,7 @@
                                     <div class="form-text">Текущий уровень знания предмета</div>
                                 </div>
 
-                                <!-- Заметки -->
+
                                 <div class="mb-4">
                                     <label for="notes" class="form-label">
                                         <i class="bi bi-card-text text-primary me-1"></i>Заметки
@@ -157,7 +157,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Информация о полях -->
+
                                 <div class="alert alert-info">
                                     <h6 class="alert-heading">
                                         <i class="bi bi-info-circle me-1"></i>Информация
@@ -171,7 +171,7 @@
                             </div>
                         </div>
 
-                        <!-- Кнопки -->
+
                         <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
                             <div>
                                 <a href="/students" class="btn btn-outline-secondary">
@@ -187,11 +187,11 @@
                                 </button>
                             </div>
                         </div>
-                    </form> <!-- КОНЕЦ ФОРМЫ -->
+                    </form>
                 </div>
             </div>
 
-            <!-- Быстрые подсказки -->
+
             <div class="row mt-4">
                 <div class="col-md-4">
                     <div class="card border-primary border-opacity-25">
@@ -228,10 +228,10 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- JavaScript для формы -->
+
 <script>
     // Подсчет символов в заметках
     const notesTextarea = document.querySelector('textarea[name="notes"]');

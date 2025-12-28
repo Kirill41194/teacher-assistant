@@ -16,6 +16,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     boolean existsByEmailAndTutor_TutorId(String email, Long tutorId);
 
+    boolean existsByTutor_TutorId(Long tutorId);
+
     @Query("SELECT s FROM Student s " +
             "WHERE s.tutor.tutorId = :tutorId " +
             "AND s.studentId NOT IN (" +

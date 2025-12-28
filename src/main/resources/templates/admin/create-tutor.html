@@ -10,7 +10,6 @@
         <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Заголовок -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h2 mb-1">
@@ -25,8 +24,6 @@
                 </div>
             </div>
 
-
-            <!-- Сообщения об успехе/ошибках -->
             <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
                 <i class="bi bi-check-circle me-2"></i>
                 <span th:text="${success}"></span>
@@ -39,7 +36,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Форма добавления -->
             <div class="card shadow">
                 <div class="card-header bg-light">
                     <h5 class="mb-0">
@@ -47,12 +43,11 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <!-- Убрал th:object, будем использовать простую форму -->
                     <form th:action="@{/admin/tutors/new}" method="post" class="needs-validation" novalidate>
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                         <div class="row g-3">
-                            <!-- Полное имя -->
+
                             <div class="col-md-6">
                                 <label for="fullName" class="form-label">
                                     <i class="bi bi-person me-1"></i>Полное имя <span class="text-danger">*</span>
@@ -67,7 +62,7 @@
                                 </div>
                             </div>
 
-                            <!-- Email -->
+
                             <div class="col-md-6">
                                 <label for="email" class="form-label">
                                     <i class="bi bi-envelope me-1"></i>Email <span class="text-danger">*</span>
@@ -82,7 +77,7 @@
                                 </div>
                             </div>
 
-                            <!-- Телефон (необязательно) -->
+
                             <div class="col-md-6">
                                 <label for="phone" class="form-label">
                                     <i class="bi bi-telephone me-1"></i>Телефон
@@ -94,7 +89,7 @@
                                        placeholder="+7 (999) 123-45-67">
                             </div>
 
-                            <!-- Роль -->
+
                             <div class="col-md-6">
                                 <label for="role" class="form-label">
                                     <i class="bi bi-shield me-1"></i>Роль <span class="text-danger">*</span>
@@ -118,7 +113,7 @@
                                 </div>
                             </div>
 
-                            <!-- Пароль -->
+
                             <div class="col-md-6">
                                 <label for="password" class="form-label">
                                     <i class="bi bi-key me-1"></i>Пароль <span class="text-danger">*</span>
@@ -133,7 +128,7 @@
                                 </div>
                             </div>
 
-                            <!-- Подтверждение пароля -->
+
                             <div class="col-md-6">
                                 <label for="confirmPassword" class="form-label">
                                     <i class="bi bi-key-fill me-1"></i>Подтверждение пароля <span class="text-danger">*</span>
@@ -147,7 +142,7 @@
                                 </div>
                             </div>
 
-                            <!-- Дополнительная информация -->
+
                             <div class="col-12">
                                 <label for="description" class="form-label">
                                     <i class="bi bi-chat-left-text me-1"></i>О себе
@@ -160,7 +155,7 @@
                                           placeholder="Краткая информация о преподавателе (опыт, образование, специализация)"></textarea>
                             </div>
 
-                            <!-- Образование -->
+
                             <div class="col-md-6">
                                 <label for="education" class="form-label">
                                     <i class="bi bi-mortarboard me-1"></i>Образование
@@ -172,7 +167,7 @@
                                        placeholder="Высшее образование, университет...">
                             </div>
 
-                            <!-- Опыт работы -->
+
                             <div class="col-md-6">
                                 <label for="experience" class="form-label">
                                     <i class="bi bi-briefcase me-1"></i>Опыт работы
@@ -184,7 +179,7 @@
                                        placeholder="Опыт преподавания...">
                             </div>
 
-                            <!-- Статус аккаунта -->
+
                             <div class="col-md-6">
                                 <div class="form-check mt-4">
                                     <input class="form-check-input"
@@ -200,7 +195,7 @@
                             </div>
                         </div>
 
-                        <!-- Кнопки формы -->
+
                         <div class="mt-4 pt-3 border-top">
                             <div class="d-flex justify-content-between">
                                 <button type="reset" class="btn btn-outline-secondary">
@@ -220,7 +215,7 @@
                 </div>
             </div>
 
-            <!-- Подсказки -->
+
             <div class="card mt-4 border-info">
                 <div class="card-header bg-info text-white">
                     <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Подсказки</h6>

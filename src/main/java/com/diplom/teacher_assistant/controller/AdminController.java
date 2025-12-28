@@ -11,11 +11,7 @@ import com.diplom.teacher_assistant.service.SecurityService;
 import com.diplom.teacher_assistant.service.TutorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.ErrorManager;
 import java.util.stream.Collectors;
 
 @Controller
@@ -256,7 +251,7 @@ public class AdminController {
         StringBuilder password = new StringBuilder();
         Random random = new Random();
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 12; i++) {
             password.append(chars.charAt(random.nextInt(chars.length())));
         }
 

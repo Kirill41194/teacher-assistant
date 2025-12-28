@@ -2,15 +2,15 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head('Редактировать предмет - Teacher Assistant')}"></head>
 <body>
-<!-- Навигация -->
+
 <div th:replace="~{fragments/nav :: mainNav}"></div>
 
 <div class="container-fluid mt-4">
     <div class="row">
-        <!-- Боковое меню -->
+
         <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
 
-        <!-- Основная область -->
+
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
@@ -20,7 +20,7 @@
                 </ol>
             </nav>
 
-            <!-- Заголовок -->
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h2 mb-1">
@@ -40,21 +40,21 @@
                 </div>
             </div>
 
-            <!-- Сообщения -->
+
             <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4">
                 <i class="bi bi-exclamation-triangle me-2"></i>
                 <span th:text="${error}"></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Форма -->
+
             <div class="card shadow">
                 <div class="card-body p-4">
                     <form th:action="@{/subjects/edit/{id}(id=${subjectId})}"
                           th:object="${subjectDTO}"
                           method="post">
 
-                        <!-- Название предмета -->
+
                         <div class="mb-4">
                             <label for="name" class="form-label">Название предмета *</label>
                             <input type="text" th:field="*{name}"
@@ -68,7 +68,7 @@
                             </div>
                         </div>
 
-                        <!-- Кнопки -->
+
                         <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
                             <div>
                                 <a href="/subjects" class="btn btn-outline-secondary">

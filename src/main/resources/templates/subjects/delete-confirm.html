@@ -33,7 +33,7 @@
                         </ul>
                     </div>
 
-                    <!-- Список тем -->
+
                     <div th:if="${not #lists.isEmpty(topics)}" class="mb-4">
                         <h5>Будут удалены темы:</h5>
                         <div class="list-group">
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <!-- Список студентов (если добавишь получение студентов) -->
+
                     <div th:if="${students != null and not #lists.isEmpty(students)}" class="mb-4">
                         <h5>Затронутые студенты:</h5>
                         <div class="list-group">

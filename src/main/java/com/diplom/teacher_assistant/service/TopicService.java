@@ -27,6 +27,10 @@ public class TopicService {
         return topicRepository.findBySubject_SubjectIdOrderByName(subjectId);
     }
 
+    public boolean existBySubjectId(Long subjectId){
+        return topicRepository.existsBySubject_SubjectId(subjectId);
+    }
+
     @Transactional
     public void createNewTopic(TopicDTO topicDTO){
         Subject subject = subjectRepository.findById(topicDTO.getSubjectId())

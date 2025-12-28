@@ -9,7 +9,7 @@
         <div th:replace="~{fragments/sidebar :: mainSidebar}"></div>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Хлебные крошки -->
+
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
@@ -22,7 +22,7 @@
                 </ol>
             </nav>
 
-            <!-- Заголовок -->
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h2 mb-1">
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <!-- Сообщения -->
+
             <div th:if="${success}" class="alert alert-success alert-dismissible fade show mb-4">
                 <i class="bi bi-check-circle me-2"></i>
                 <span th:text="${success}"></span>
@@ -54,9 +54,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Основной контент -->
+
             <div class="row">
-                <!-- Левая колонка: Форма выбора предметов -->
+
                 <div class="col-lg-8">
                     <div class="card shadow">
                         <div class="card-header bg-white">
@@ -75,7 +75,7 @@
                                 <form th:action="@{/students/{studentId}/subjects/enroll(studentId=${student.studentId})}"
                                       th:object="${enrollDTO}" method="post" id="enrollForm">
 
-                                    <!-- Быстрые действия -->
+
                                     <div class="d-flex justify-content-end mb-3">
                                         <button type="button" class="btn btn-sm btn-outline-secondary me-2"
                                                 onclick="selectAllSubjects()">
@@ -87,7 +87,7 @@
                                         </button>
                                     </div>
 
-                                    <!-- Список предметов -->
+
                                     <div class="row">
                                         <div th:each="subject : ${availableSubjects}"
                                              class="col-md-6 col-lg-4 mb-3">
@@ -124,7 +124,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Сводка выбора -->
+
                                     <div class="mt-4 pt-4 border-top">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
@@ -145,7 +145,7 @@
                                 </form>
                             </div>
 
-                            <!-- Если нет доступных предметов -->
+
                             <div th:if="${#lists.isEmpty(availableSubjects)}" class="text-center py-5">
                                 <i class="bi bi-book display-4 text-muted opacity-25 mb-3"></i>
                                 <h4 class="text-muted mb-3">Нет доступных предметов</h4>
@@ -166,9 +166,9 @@
                     </div>
                 </div>
 
-                <!-- Правая колонка: Информация -->
+
                 <div class="col-lg-4">
-                    <!-- Карточка студента -->
+
                     <div class="card shadow mb-4">
                         <div class="card-header bg-white">
                             <h5 class="card-title mb-0">
@@ -219,7 +219,7 @@
                         </div>
                     </div>
 
-                    <!-- Уже записанные предметы -->
+
                     <div class="card shadow">
                         <div class="card-header bg-white">
                             <h5 class="card-title mb-0">
@@ -252,7 +252,7 @@
                                                    class="btn btn-outline-info">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
-                                                <!-- Форма для удаления студента с предмета -->
+
                                                 <form th:action="@{/students/{studentId}/subjects/{subjectId}/unenroll(studentId=${student.studentId}, subjectId=${ss.subject.subjectId})}"
                                                       method="post"
                                                       class="d-inline"

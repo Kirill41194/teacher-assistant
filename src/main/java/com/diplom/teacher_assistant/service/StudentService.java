@@ -25,6 +25,11 @@ public class StudentService {
         return studentRepository.findByTutor_TutorIdOrderByFullName(tutorId);
     }
 
+    public boolean existByTutorId(){
+        Long tutorId = securityService.getCurrentTutorId();
+        return studentRepository.existsByTutor_TutorId(tutorId);
+    }
+
     public List<StudentSubject> getStudentSubjects(Long studentId){
         return studentSubjectRepository.findByStudent_StudentId(studentId);
     }
